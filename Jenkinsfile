@@ -4,13 +4,13 @@ pipeline {
         stage('--cleanup--') {
             steps {
                 // Stop all ducker containers
-                sh "docker stop \$(docker ps -f "name=ducker*" --format="{{.Names}}") 2>/dev/null || echo 'No more containers to remove.'"
+                sh "docker stop \$(docker ps -f \"name=ducker*\" --format=\"{{.Names}}\") 2>/dev/null || echo 'No more containers to remove.'"
                 
                // Remove all ducker containers
-               sh "docker rm -vf \$(docker ps -f "name=ducker*" --format="{{.Names}}") 2>/dev/null || echo 'No more containers to remove.'"
+               sh "docker rm -vf \$(docker ps -f \"name=ducker*\" --format=\"{{.Names}}\") 2>/dev/null || echo 'No more containers to remove.'"
 
                // Remove all ducker images
-               sh "docker rmi \$(docker ps -f "name=ducker*" --format="{{.Names}}") -f 2>/dev/null || echo 'No more images to remove.'"
+               sh "docker rmi \$(docker ps -f \"name=ducker*\" --format=\"{{.Names}}\") -f 2>/dev/null || echo 'No more images to remove.'"
             }
         }
         stage('--checkout--') {
