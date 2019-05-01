@@ -36,11 +36,11 @@ pipeline {
         stage('--prepare--') {
             steps {
                 // Remove ARG from begining
-                sh "sed -i -e \"/^ARG jdk_version/d\" tests/docker/DockerFile"
+                sh "sed -i -e \"/^ARG jdk_version/d\" tests/docker/Dockerfile"
 
                // Set JDK Version
                // TODO : Make this a parameter
-               sh "sed -i -e \"s/^FROM \\$jdk_version/FROM openjdk:8/g\" tests/docker/DockerFile"
+               sh "sed -i -e \"s/^FROM \\$jdk_version/FROM openjdk:8/g\" tests/docker/Dockerfile"
 
                // Check which Kafka and sttrream version do we need to test.
                // --- DockerFile	2019-05-01 13:38:52.221039934 +0200
