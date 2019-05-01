@@ -49,9 +49,10 @@ pipeline {
                // -RUN mkdir -p "/opt/kafka-2.1.0" && chmod a+rw /opt/kafka-2.1.0 && curl -s "$KAFKA_MIRROR/kafka_2.12-2.1.0.tgz" | tar xz --strip-components=1 -C "/opt/kafka-2.1.0"
                // +RUN mkdir -p "/opt/kafka-2.0.0" && chmod a+rw /opt/kafka-2.0.0 && curl -s "$KAFKA_MIRROR/kafka_2.12-2.0.0.tgz" | tar xz --strip-components=1 -C "/opt/kafka-2.0.0"
 
-               // Add user duker
+               // Add user duker with UID and GID parameters
                sh "echo \"UID ${params.duckerUID}\""
                sh "echo \"GID ${params.duckerGID}\""
+               sh "sed -i -e \"s/^useradd -ms/groupadd -g ${params.duckerGID} ducker \&\& useradd -g ${params.duckerGID} -u ${params.duckerUID} -ms/g\" tests/docker/Dockerfile"
             }
         }
         stage('--build--') {
