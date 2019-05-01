@@ -4,7 +4,7 @@ pipeline {
         stage('--cleanup--') {
             steps {
                  // Debug
-                 sh "docker ps -f \"name=ducker*\" --format=\"{{.Names}}\""
+                 sh "docker ps -f \\"name=ducker*\\" --format=\\"{{.Names}}\\""
 
                 // Stop all ducker containers
                 sh "docker stop \$(docker ps -f \"name=ducker*\" --format=\"{{.Names}}\") 2>/dev/null || echo 'No more containers to remove.'"
