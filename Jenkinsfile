@@ -52,7 +52,7 @@ pipeline {
                // Add user duker with UID and GID parameters
                sh "echo \"UID ${params.duckerUID}\""
                sh "echo \"GID ${params.duckerGID}\""
-               sh "sed -i -e \"s/^useradd -ms/groupadd -g ${params.duckerGID} ducker \&\& useradd -g ${params.duckerGID} -u ${params.duckerUID} -ms/g\" tests/docker/Dockerfile"
+               sh "sed -i -e \"s/^useradd -ms/groupadd -g ${params.duckerGID} ducker \\&\\& useradd -g ${params.duckerGID} -u ${params.duckerUID} -ms/g\" tests/docker/Dockerfile"
             }
         }
         stage('--build--') {
