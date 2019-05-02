@@ -7,6 +7,12 @@ pipeline {
         string(name: 'duckerGID',
           defaultValue: '1000',
           description: 'Ducker GroupID')
+        string(name: 'TC_PATHS',
+          defaultValue: 'tests/kafkatest/tests/client/pluggable_test.py',
+          description: 'Test path definition')
+        string(name: 'JDK_VERSION',
+          defaultValue: 'openjdk:8',
+          description: 'JDK Version')
     }
     stages {
         stage('--cleanup--') {
@@ -26,8 +32,7 @@ pipeline {
         }
         stage('--checkout--') {
             steps {
-                // Checkout kafka source from granzoto repo
-                // TODO : Switch to real kafka repo
+                // Checkout kafka source from real Kafka repo
 
                 // RG checkout([$class: 'GitSCM', branches: [[name: '*/granzoto-test-jenkins']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/granzoto/kafka']]])
                 checkout([$class: 'GitSCM', branches: [[name: '*/trunk']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/apache/kafka']]])
@@ -39,8 +44,7 @@ pipeline {
                 sh "sed -i -e \"/^ARG jdk_version/d\" tests/docker/Dockerfile"
 
                // Set JDK Version in Dockerfile
-               // TODO : Make this a parameter
-               sh "sed -i -e \"s/^FROM .jdk_version/FROM openjdk:8/g\" tests/docker/Dockerfile"
+               sh "sed -i -e \"s/^FROM .jdk_version/FROM ${params.JDK_VERSION}/g\" tests/docker/Dockerfile"
 
                // Set TimeZone in Dockerfile
                sh "sed -i -e \"s#America/Los_Angeles#Europe/Prague#g\" tests/docker/Dockerfile"
@@ -53,8 +57,6 @@ pipeline {
                // +RUN mkdir -p "/opt/kafka-2.0.0" && chmod a+rw /opt/kafka-2.0.0 && curl -s "$KAFKA_MIRROR/kafka_2.12-2.0.0.tgz" | tar xz --strip-components=1 -C "/opt/kafka-2.0.0"
 
                // Add user duker with UID and GID parameters
-               sh "echo \"UID ${params.duckerUID}\""
-               sh "echo \"GID ${params.duckerGID}\""
                sh "sed -i -e \"s/^RUN useradd -ms/RUN groupadd -g ${params.duckerGID} ducker \\&\\& useradd -g ${params.duckerGID} -u ${params.duckerUID} -ms/g\" tests/docker/Dockerfile"
             }
         }
@@ -74,7 +76,7 @@ pipeline {
                     echo "Install ducktape"
                     pip install ducktape
                     echo "Run a single test"
-                    TC_PATHS=tests/kafkatest/tests/client/pluggable_test.py tests/docker/run_tests.sh
+                    TC_PATHS=${params.TC_PATHS} tests/docker/run_tests.sh
                 '''  
             }
         }
