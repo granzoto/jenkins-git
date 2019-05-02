@@ -7,7 +7,7 @@ pipeline {
         string(name: 'duckerGID',
           defaultValue: '1000',
           description: 'Ducker GroupID')
-        string(name: 'TC_PATHS',
+        string(name: 'testPath',
           defaultValue: 'tests/kafkatest/tests/client/pluggable_test.py',
           description: 'Test path definition')
         string(name: 'JDK_VERSION',
@@ -76,7 +76,7 @@ pipeline {
                     echo "Install ducktape"
                     pip install ducktape
                     echo "Run a single test"
-                    TC_PATHS=${params.TC_PATHS} tests/docker/run_tests.sh
+                    TC_PATHS=${params.testPath} tests/docker/run_tests.sh
                 '''  
             }
         }
