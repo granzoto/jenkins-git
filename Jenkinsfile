@@ -68,8 +68,9 @@ pipeline {
                     echo "Install ducktape"
                     pip install ducktape
                     echo "Run a single test"
-                    TC_PATHS="${params.testPath}" tests/docker/run_tests.sh
                 '''  
+                sh "echo \"Run a single test\""
+                sh ". ./streams-rhel/bin/activate && TC_PATHS=${params.testPath} tests/docker/run_tests.sh"
             }
         }
     }
