@@ -69,6 +69,8 @@ pipeline {
                 //     3 - Run tests
                 // TODO : Check if we can make it modular
 
+                sh "Test for parameter substitution - ${params.testPath} - The value should be inside the hifens"
+
                 sh '''
                     echo "Setting up virtualEnv"
                     virtualenv streams-rhel
